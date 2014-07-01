@@ -60,6 +60,9 @@ extern "C" {
 //#define LIBCL__STR ""
 //#define LIBCL__STR ""
 
+#define ENABLE_FUNCTION_BEGIN	1
+#define ENABLE_FUNCTION_END 	1
+
 // OpenCL version 1.1: https://www.khronos.org/registry/cl/api/1.1/cl.h
 /* Platform API */
 typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clGetPlatformIDs) (
@@ -266,7 +269,7 @@ clSetCommandQueueProperty(cl_command_queue              /* command_queue */,
 
 
 /* Memory Object APIs */
-typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clCreateBuffer) (
+typedef CL_API_ENTRY cl_mem CL_API_CALL (*cl_api_call_clCreateBuffer) (
 		cl_context   /* context */,
 		cl_mem_flags /* flags */,
 		size_t       /* size */,
@@ -282,7 +285,7 @@ clCreateBuffer(cl_context   /* context */,
 
 
 
-typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clCreateSubBuffer) (
+typedef CL_API_ENTRY cl_mem CL_API_CALL (*cl_api_call_clCreateSubBuffer) (
 		cl_mem                   /* buffer */,
 		cl_mem_flags             /* flags */,
 		cl_buffer_create_type    /* buffer_create_type */,
@@ -299,7 +302,7 @@ clCreateSubBuffer(
 
 
 
-typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clCreateImage2D) (
+typedef CL_API_ENTRY cl_mem CL_API_CALL (*cl_api_call_clCreateImage2D) (
 		cl_context              /* context */,
 		cl_mem_flags            /* flags */,
 		const cl_image_format * /* image_format */,
@@ -322,7 +325,7 @@ clCreateImage2D(
 
 
 
-typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clCreateImage3D) (
+typedef CL_API_ENTRY cl_mem CL_API_CALL (*cl_api_call_clCreateImage3D) (
 		cl_context              /* context */,
 				cl_mem_flags            /* flags */,
 				const cl_image_format * /* image_format */,
@@ -423,7 +426,7 @@ clSetMemObjectDestructorCallback(  cl_mem /* memobj */,
 		void * /*user_data */ )             CL_API_SUFFIX__VERSION_1_1;
 
 /* Sampler APIs  */
-typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clCreateSampler) (
+typedef CL_API_ENTRY cl_sampler CL_API_CALL (*cl_api_call_clCreateSampler) (
 		cl_context          /* context */,
 				cl_bool             /* normalized_coords */,
 				cl_addressing_mode  /* addressing_mode */,
@@ -472,7 +475,7 @@ clGetSamplerInfo(cl_sampler         /* sampler */,
 
 
 /* Program Object APIs  */
-typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clCreateProgramWithSource) (
+typedef CL_API_ENTRY cl_program CL_API_CALL (*cl_api_call_clCreateProgramWithSource) (
 		cl_context        /* context */,
 				cl_uint           /* count */,
 				const char **     /* strings */,
@@ -488,7 +491,7 @@ clCreateProgramWithSource(cl_context        /* context */,
 
 
 
-typedef CL_API_ENTRY cl_int CL_API_CALL (*cl_api_call_clCreateProgramWithBinary) (
+typedef CL_API_ENTRY cl_program CL_API_CALL (*cl_api_call_clCreateProgramWithBinary) (
 		cl_context                     /* context */,
 				cl_uint                        /* num_devices */,
 				const cl_device_id *           /* device_list */,
