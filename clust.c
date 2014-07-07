@@ -102,12 +102,11 @@ __attribute__((constructor)) void libCLUST() {
 }
 
 void functionBegin(const char* functionName) {
-	tracef(stdout, "%s: Calling %s\n", LIB_NAME, functionName);
-
+	tracef("%s: Calling %s\n", LIB_NAME, functionName);
 }
 
 void functionEnd(const char* functionName) {
-	tracef(stdout, "%s: %s returned.\n", LIB_NAME, functionName);
+	tracef("%s: %s returned.\n", LIB_NAME, functionName);
 }
 
 void* dlSymFunction(void* libPtr, const char* functionName) {
