@@ -2,16 +2,38 @@
  * clust.c
  *
  *  Created on: Jun 18, 2014
- *      Author: david
+ *
+ * This library is meant to be used as an LD_PRELOAD before launching any
+ * software that uses OpenCL. It then allows to record the calls to the
+ * OpenCL functions with LTTng-ust events. In addition to recording the
+ * calls to the OpenCL API, it will use (and require) NVIDIA's CUPTI
+ * library to record data transfers between host and device as well as
+ * kernel execution metrics.
+ *
+ * Copyright (C) 2014-2015 David Couturier <david.couturier@polymtl.ca>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; only
+ * version 2.1 of the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <dlfcn.h>
-#include <GL/gl.h>
-#include <lttng/tracef.h>
-
 #include "clust.h"
+#include "clustfunctions.h"
+#include <stdlib.h>
+#include <stdio.h> // for fprintf
+#include <dlfcn.h> // for Dynamic loading (dlSym) (must include "dl")
+#include <lttng/tracef.h> // LTTng UST ftrace (must include "lttng-ust")
+
 
 #ifdef __cplusplus
 "C" {
@@ -99,6 +121,8 @@ __attribute__((constructor)) void libCLUST() {
 	fprintf(stdout, "%s: OpenCL Symbols being replaced...\n", LIB_NAME);
 #endif
 	init_libcl_symbols();
+
+	clustInit();
 }
 
 void functionBegin(const char* functionName) {
@@ -110,8 +134,9 @@ void functionEnd(const char* functionName) {
 }
 
 void* dlSymFunction(void* libPtr, const char* functionName) {
+#ifdef DEBUG
 	fprintf(stdout, "%s: Loading %s\n", LIB_NAME, functionName);
-	//fprintf(stdout, "%s: libcl_ptr = %p\n", LIB_NAME, libPtr);
+#endif
 
 	void* ptr;
 	*(void**)(&ptr) = dlsym(libPtr, functionName);
@@ -119,7 +144,9 @@ void* dlSymFunction(void* libPtr, const char* functionName) {
 		fprintf(stderr, "%s: Unable to load %s\n", LIB_NAME, functionName);
 		exit(EXIT_FAILURE);
 	}
+#ifdef DEBUG
 	fprintf(stdout, "%s: dlSymPtr = %p\n", LIB_NAME, ptr);
+#endif
 	return ptr;
 }
 
@@ -265,6 +292,9 @@ CL_API_ENTRY cl_context CL_API_CALL clCreateContext(const cl_context_properties 
 #if ENABLE_FUNCTION_END != 0
 	functionEnd(LIBCL_CREATE_CONTEXT_STR);
 #endif
+	if(*errcode_ret == CL_SUCCESS) {
+		clustContextCreated(ret);
+	}
 	return ret;
 }
 CL_API_ENTRY cl_context CL_API_CALL clCreateContextFromType(const cl_context_properties * properties, cl_device_type device_type, void (CL_CALLBACK * pfn_notify )(const char *, const void *, size_t, void *), void * user_data, cl_int * errcode_ret ) CL_API_SUFFIX__VERSION_1_0 {

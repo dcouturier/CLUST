@@ -2,7 +2,29 @@
  * clust.h
  *
  *  Created on: Jun 18, 2014
- *      Author: david
+ *
+ * This library is meant to be used as an LD_PRELOAD before launching any
+ * software that uses OpenCL. It then allows to record the calls to the
+ * OpenCL functions with LTTng-ust events. In addition to recording the
+ * calls to the OpenCL API, it will use (and require) NVIDIA's CUPTI
+ * library to record data transfers between host and device as well as
+ * kernel execution metrics.
+ *
+ * Copyright (C) 2014-2015 David Couturier <david.couturier@polymtl.ca>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; only
+ * version 2.1 of the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 #ifndef CLUST_H_
@@ -10,13 +32,19 @@
 
 #include <CL/cl.h>
 
+#define LIB_NAME "libCLUST"
+#define LIBCL_NAME "libOpenCL.so"
+
+#define ENABLE_AMD_GPU_PERF_API 1
+//#if ENABLE_NVIDIA_CUPTI == 1
+//#include <cupti.h>
+//#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-#define LIB_NAME "libCLUST"
-#define LIBCL_NAME "libOpenCL.so"
 
 #define LIBCL_GET_PLATFORM_IDS_STR "clGetPlatformIDs"
 #define LIBCL_GET_PLATFORM_INFO_STR "clGetPlatformInfo"
