@@ -292,9 +292,6 @@ CL_API_ENTRY cl_context CL_API_CALL clCreateContext(const cl_context_properties 
 #if ENABLE_FUNCTION_END != 0
 	functionEnd(LIBCL_CREATE_CONTEXT_STR);
 #endif
-	if(*errcode_ret == CL_SUCCESS) {
-		clustContextCreated(ret);
-	}
 	return ret;
 }
 CL_API_ENTRY cl_context CL_API_CALL clCreateContextFromType(const cl_context_properties * properties, cl_device_type device_type, void (CL_CALLBACK * pfn_notify )(const char *, const void *, size_t, void *), void * user_data, cl_int * errcode_ret ) CL_API_SUFFIX__VERSION_1_0 {
@@ -345,6 +342,10 @@ CL_API_ENTRY cl_command_queue CL_API_CALL clCreateCommandQueue(cl_context contex
 #if ENABLE_FUNCTION_END != 0
 	functionEnd(LIBCL_CREATE_COMMAND_QUEUE_STR);
 #endif
+
+	if(*errcode_ret == CL_SUCCESS) {
+		clustContextCreated(ret);
+	}
 	return ret;
 }
 CL_API_ENTRY cl_int CL_API_CALL clRetainCommandQueue(cl_command_queue command_queue ) CL_API_SUFFIX__VERSION_1_0 {

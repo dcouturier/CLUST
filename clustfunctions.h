@@ -33,7 +33,7 @@
 #include <CL/cl.h>
 
 void clustInit();
-void clustContextCreated(cl_context context);
+void clustContextCreated(cl_command_queue context);
 
 
 #endif /* CLUSTFUNCTIONS_H_ */

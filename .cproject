@@ -100,16 +100,26 @@
 								<option id="gnu.cpp.compiler.exe.release.option.optimization.level.151627413" name="Optimization Level" superClass="gnu.cpp.compiler.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.1216998810" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.731776304" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
+							<tool command="gcc -fPIC" id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.731776304" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.exe.release.option.optimization.level.1101595410" name="Optimization Level" superClass="gnu.c.compiler.exe.release.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.release.option.debugging.level.427403089" name="Debug Level" superClass="gnu.c.compiler.exe.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.2122421223" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_LINUX"/>
 								</option>
+								<option id="gnu.c.compiler.option.include.paths.1474828751" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/home/david/Downloads/GPUPerfAPI-2.13.718-lnx/Include"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.509890781" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.22119326" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release">
+							<tool command="gcc" id="cdt.managedbuild.tool.gnu.c.linker.exe.release.22119326" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release">
 								<option defaultValue="true" id="gnu.c.link.option.shared.1404304344" name="Shared (-shared)" superClass="gnu.c.link.option.shared" valueType="boolean"/>
+								<option id="gnu.c.link.option.libs.983973470" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="lttng-ust"/>
+									<listOptionValue builtIn="false" value="GPUPerfAPICL"/>
+								</option>
+								<option id="gnu.c.link.option.paths.1185865998" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="/home/david/Downloads/GPUPerfAPI-2.13.718-lnx/Bin/Linx64"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1001898349" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

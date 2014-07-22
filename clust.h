@@ -35,7 +35,7 @@
 #define LIB_NAME "libCLUST"
 #define LIBCL_NAME "libOpenCL.so"
 
-#define ENABLE_AMD_GPU_PERF_API 1
+#define ENABLE_AMD_GPU_PERF_API 0
 //#if ENABLE_NVIDIA_CUPTI == 1
 //#include <cupti.h>
 //#endif
