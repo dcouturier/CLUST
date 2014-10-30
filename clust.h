@@ -3,11 +3,12 @@
 
 #include <CL/cl.h>
 
+#define TRACEPOINT_DEFINE
+#define TRACEPOINT_CREATE_PROBES
 #undef TRACEPOINT_PROVIDER
 #define TRACEPOINT_PROVIDER clust_provider
 #undef TRACEPOINT_INCLUDE_FILE
 #define TRACEPOINT_INCLUDE_FILE ./clust.h
-#include <lttng/tracef.h>
 #include <lttng/tracepoint.h>
 #define LIB_NAME "libCLUST"
 #define LIBCL_NAME "libOpenCL.so"

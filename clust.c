@@ -1,5 +1,5 @@
 #include "clust.h"
-//#include <dlfcn.h>
+#include <dlfcn.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -82,7 +82,7 @@ cl_api_call_clEnqueueBarrier reallib_clEnqueueBarrier;
 cl_api_call_clGetExtensionFunctionAddress reallib_clGetExtensionFunctionAddress;
 
 
-void* dlSymFunction(void *libPtr, const char *functionName) {
+void* dlSymFunction(void* libPtr, const char* functionName) {
 	void* ptr;
 	*(void**)(&ptr) = dlsym(libPtr, functionName);
 	if(!ptr) {
@@ -93,13 +93,10 @@ void* dlSymFunction(void *libPtr, const char *functionName) {
 }
 
 __attribute__((constructor)) void libCLUST() {
-	tracef("I love potatoes");
-	printf("constructor prints\n"); fflush(stdout);
 	void* libcl_ptr;
 	dlerror();
-	printf("before prints\n"); fflush(stdout);
 	libcl_ptr = dlopen(LIBCL_NAME, RTLD_LAZY);
-	printf("after prints\n");fflush(stdout);
+
 	if(!libcl_ptr) {
 		fprintf(stderr, "%s: Unable to load %s\n", LIB_NAME, LIBCL_NAME);
 		exit(EXIT_FAILURE);
@@ -590,35 +587,35 @@ cl_int clEnqueueCopyBufferRect(cl_command_queue command_queue, cl_mem src_buffer
 
 cl_int clEnqueueReadImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_read, const size_t * origin, const size_t * region, size_t row_pitch, size_t slice_pitch, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, clust_tracepoint, "clEnqueueReadImage");
-	cl_int ret = reallib_clEnqueueReadImage(command_queue, image, blocking_read, origin, region, row_pitch, slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
+	cl_int ret = reallib_clEnqueueReadImage(command_queue, image, blocking_read, &origin, &region, row_pitch, slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
 	return ret;
 }
 
 
 cl_int clEnqueueWriteImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_write, const size_t * origin, const size_t * region, size_t input_row_pitch, size_t input_slice_pitch, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, clust_tracepoint, "clEnqueueWriteImage");
-	cl_int ret = reallib_clEnqueueWriteImage(command_queue, image, blocking_write, origin, region, input_row_pitch, input_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
+	cl_int ret = reallib_clEnqueueWriteImage(command_queue, image, blocking_write, &origin, &region, input_row_pitch, input_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
 	return ret;
 }
 
 
 cl_int clEnqueueCopyImage(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_image, const size_t * src_origin, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, clust_tracepoint, "clEnqueueCopyImage");
-	cl_int ret = reallib_clEnqueueCopyImage(command_queue, src_image, dst_image, src_origin, dst_origin, region, num_events_in_wait_list, event_wait_list, event);
+	cl_int ret = reallib_clEnqueueCopyImage(command_queue, src_image, dst_image, &src_origin, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
 	return ret;
 }
 
 
 cl_int clEnqueueCopyImageToBuffer(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_buffer, const size_t * src_origin, const size_t * region, size_t dst_offset, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, clust_tracepoint, "clEnqueueCopyImageToBuffer");
-	cl_int ret = reallib_clEnqueueCopyImageToBuffer(command_queue, src_image, dst_buffer, src_origin, region, dst_offset, num_events_in_wait_list, event_wait_list, event);
+	cl_int ret = reallib_clEnqueueCopyImageToBuffer(command_queue, src_image, dst_buffer, &src_origin, &region, dst_offset, num_events_in_wait_list, event_wait_list, event);
 	return ret;
 }
 
 
 cl_int clEnqueueCopyBufferToImage(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_image, size_t src_offset, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, clust_tracepoint, "clEnqueueCopyBufferToImage");
-	cl_int ret = reallib_clEnqueueCopyBufferToImage(command_queue, src_buffer, dst_image, src_offset, dst_origin, region, num_events_in_wait_list, event_wait_list, event);
+	cl_int ret = reallib_clEnqueueCopyBufferToImage(command_queue, src_buffer, dst_image, src_offset, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
 	return ret;
 }
 
@@ -632,7 +629,7 @@ void * clEnqueueMapBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool
 
 void * clEnqueueMapImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_map, cl_map_flags map_flags, const size_t * origin, const size_t * region, size_t * image_row_pitch, size_t * image_slice_pitch, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, clust_tracepoint, "clEnqueueMapImage");
-	void * ret = reallib_clEnqueueMapImage(command_queue, image, blocking_map, map_flags, origin, region, image_row_pitch, image_slice_pitch, num_events_in_wait_list, event_wait_list, event, errcode_ret);
+	void * ret = reallib_clEnqueueMapImage(command_queue, image, blocking_map, map_flags, &origin, &region, image_row_pitch, image_slice_pitch, num_events_in_wait_list, event_wait_list, event, errcode_ret);
 	return ret;
 }
 
