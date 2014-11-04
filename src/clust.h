@@ -2,30 +2,13 @@
 #define CLUST_H_
 
 #include <CL/cl.h>
-
-#define TRACEPOINT_DEFINE
-#define TRACEPOINT_CREATE_PROBES
-#undef TRACEPOINT_PROVIDER
-#define TRACEPOINT_PROVIDER clust_provider
-#undef TRACEPOINT_INCLUDE_FILE
-#define TRACEPOINT_INCLUDE_FILE ./clust.h
-#include <lttng/tracepoint.h>
 #define LIB_NAME "libCLUST"
 #define LIBCL_NAME "libOpenCL.so"
+
 #ifdef __cplusplus
 "C" {
 #endif
 
-TRACEPOINT_EVENT(
-	clust_provider,
-	clust_tracepoint,
-	TP_ARGS(char *, text),
-	TP_FIELDS(
-	ctf_string(message, text)
-	)
-)
-
-#include <lttng/tracepoint-event.h>
 typedef cl_int (*cl_api_call_clGetPlatformIDs) (cl_uint num_entries,cl_platform_id * platforms,cl_uint * num_platforms);
 extern cl_api_call_clGetPlatformIDs reallib_clGetPlatformIDs;
 extern cl_int clGetPlatformIDs(cl_uint num_entries, cl_platform_id * platforms, cl_uint * num_platforms)  CL_API_SUFFIX__VERSION_1_0;
