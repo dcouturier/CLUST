@@ -2,9 +2,9 @@
 #define CLUST_H_
 
 #include <CL/cl.h>
+
 #define LIB_NAME "libCLUST"
 #define LIBCL_NAME "libOpenCL.so"
-
 #ifdef __cplusplus
 "C" {
 #endif
