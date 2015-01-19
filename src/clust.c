@@ -113,6 +113,7 @@ __attribute__((constructor)) void libCLUST() {
 		exit(EXIT_FAILURE);
 	}
 	dlerror();
+
 	reallib_clGetPlatformIDs = (cl_api_call_clGetPlatformIDs) dlSymFunction(libcl_ptr, "clGetPlatformIDs");
 	reallib_clGetPlatformInfo = (cl_api_call_clGetPlatformInfo) dlSymFunction(libcl_ptr, "clGetPlatformInfo");
 	reallib_clGetDeviceIDs = (cl_api_call_clGetDeviceIDs) dlSymFunction(libcl_ptr, "clGetDeviceIDs");
@@ -186,480 +187,9 @@ __attribute__((constructor)) void libCLUST() {
 	reallib_clEnqueueWaitForEvents = (cl_api_call_clEnqueueWaitForEvents) dlSymFunction(libcl_ptr, "clEnqueueWaitForEvents");
 	reallib_clEnqueueBarrier = (cl_api_call_clEnqueueBarrier) dlSymFunction(libcl_ptr, "clEnqueueBarrier");
 	reallib_clGetExtensionFunctionAddress = (cl_api_call_clGetExtensionFunctionAddress) dlSymFunction(libcl_ptr, "clGetExtensionFunctionAddress");
-}
-
-cl_int clGetPlatformIDs(cl_uint num_entries, cl_platform_id * platforms,
-                            cl_uint * num_platforms) {
-        // Trace API call begin
-        tracepoint(clust_provider, cl_function, "clGetPlatformIDs");
-        // Call to the real OpenCL library
-        cl_int ret = reallib_clGetPlatformIDs(num_entries, platforms, num_platforms);
-        // Trace API call end
-//        tracepoint(clust_provider, cl_function, "clGetPlatformIDs", false);
-        return ret;
-    }
-/*
-cl_int clGetPlatformIDs(cl_uint num_entries, cl_platform_id * platforms, cl_uint * num_platforms)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetPlatformIDs");
-	cl_int ret = reallib_clGetPlatformIDs(num_entries, platforms, num_platforms);
-	return ret;
-}*/
-
-
-cl_int clGetPlatformInfo(cl_platform_id platform, cl_platform_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetPlatformInfo");
-	cl_int ret = reallib_clGetPlatformInfo(platform, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_int clGetDeviceIDs(cl_platform_id platform, cl_device_type device_type, cl_uint num_entries, cl_device_id * devices, cl_uint * num_devices)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetDeviceIDs");
-	cl_int ret = reallib_clGetDeviceIDs(platform, device_type, num_entries, devices, num_devices);
-	return ret;
-}
-
-
-cl_int clGetDeviceInfo(cl_device_id device, cl_device_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetDeviceInfo");
-	cl_int ret = reallib_clGetDeviceInfo(device, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_context clCreateContext(const cl_context_properties * properties, cl_uint num_devices, const cl_device_id * devices, void (CL_CALLBACK * pfn_notify )(const char *, const void *, size_t, void *) , void * param_4, cl_int * user_data)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateContext");
-	cl_context ret = reallib_clCreateContext(properties, num_devices, devices, pfn_notify, param_4, user_data);
-	return ret;
-}
-
-
-cl_context clCreateContextFromType(const cl_context_properties * properties, cl_device_type device_type, void (CL_CALLBACK * pfn_notify )(const char *, const void *, size_t, void *) , void * param_3, cl_int * user_data)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateContextFromType");
-	cl_context ret = reallib_clCreateContextFromType(properties, device_type, pfn_notify, param_3, user_data);
-	return ret;
-}
-
-
-cl_int clRetainContext(cl_context context)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clRetainContext");
-	cl_int ret = reallib_clRetainContext(context);
-	return ret;
-}
-
-
-cl_int clReleaseContext(cl_context context)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clReleaseContext");
-	cl_int ret = reallib_clReleaseContext(context);
-	return ret;
-}
-
-
-cl_int clGetContextInfo(cl_context context, cl_context_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetContextInfo");
-	cl_int ret = reallib_clGetContextInfo(context, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_command_queue clCreateCommandQueue(cl_context context, cl_device_id device, cl_command_queue_properties properties, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateCommandQueue");
-	properties |= CL_QUEUE_PROFILING_ENABLE;
-	cl_command_queue ret = reallib_clCreateCommandQueue(context, device, properties, errcode_ret);
-	return ret;
-}
-
-
-cl_int clRetainCommandQueue(cl_command_queue command_queue)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clRetainCommandQueue");
-	cl_int ret = reallib_clRetainCommandQueue(command_queue);
-	return ret;
-}
-
-
-cl_int clReleaseCommandQueue(cl_command_queue command_queue)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clReleaseCommandQueue");
-	cl_int ret = reallib_clReleaseCommandQueue(command_queue);
-	return ret;
-}
-
-
-cl_int clGetCommandQueueInfo(cl_command_queue command_queue, cl_command_queue_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetCommandQueueInfo");
-	cl_int ret = reallib_clGetCommandQueueInfo(command_queue, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_mem clCreateBuffer(cl_context context, cl_mem_flags flags, size_t size, void * host_ptr, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateBuffer");
-	cl_mem ret = reallib_clCreateBuffer(context, flags, size, host_ptr, errcode_ret);
-	return ret;
-}
-
-
-cl_mem clCreateSubBuffer(cl_mem buffer, cl_mem_flags flags, cl_buffer_create_type buffer_create_type, const void * buffer_create_info, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clCreateSubBuffer");
-	cl_mem ret = reallib_clCreateSubBuffer(buffer, flags, buffer_create_type, buffer_create_info, errcode_ret);
-	return ret;
-}
-
-
-cl_mem clCreateImage2D(cl_context context, cl_mem_flags flags, const cl_image_format * image_format, size_t image_width, size_t image_height, size_t image_row_pitch, void * host_ptr, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateImage2D");
-	cl_mem ret = reallib_clCreateImage2D(context, flags, image_format, image_width, image_height, image_row_pitch, host_ptr, errcode_ret);
-	return ret;
-}
-
-
-cl_mem clCreateImage3D(cl_context context, cl_mem_flags flags, const cl_image_format * image_format, size_t image_width, size_t image_height, size_t image_depth, size_t image_row_pitch, size_t image_slice_pitch, void * host_ptr, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateImage3D");
-	cl_mem ret = reallib_clCreateImage3D(context, flags, image_format, image_width, image_height, image_depth, image_row_pitch, image_slice_pitch, host_ptr, errcode_ret);
-	return ret;
-}
-
-
-cl_int clRetainMemObject(cl_mem memobj)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clRetainMemObject");
-	cl_int ret = reallib_clRetainMemObject(memobj);
-	return ret;
-}
-
-
-cl_int clReleaseMemObject(cl_mem memobj)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clReleaseMemObject");
-	cl_int ret = reallib_clReleaseMemObject(memobj);
-	return ret;
-}
-
-
-cl_int clGetSupportedImageFormats(cl_context context, cl_mem_flags flags, cl_mem_object_type image_type, cl_uint num_entries, cl_image_format * image_formats, cl_uint * num_image_formats)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetSupportedImageFormats");
-	cl_int ret = reallib_clGetSupportedImageFormats(context, flags, image_type, num_entries, image_formats, num_image_formats);
-	return ret;
-}
-
-
-cl_int clGetMemObjectInfo(cl_mem memobj, cl_mem_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetMemObjectInfo");
-	cl_int ret = reallib_clGetMemObjectInfo(memobj, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_int clGetImageInfo(cl_mem image, cl_image_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetImageInfo");
-	cl_int ret = reallib_clGetImageInfo(image, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_int clSetMemObjectDestructorCallback(cl_mem memobj, void (CL_CALLBACK * pfn_notify )( cl_mem , void* ) , void * user_data)              CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clSetMemObjectDestructorCallback");
-	cl_int ret = reallib_clSetMemObjectDestructorCallback(memobj, pfn_notify, user_data);
-	return ret;
-}
-
-
-cl_sampler clCreateSampler(cl_context context, cl_bool normalized_coords, cl_addressing_mode addressing_mode, cl_filter_mode filter_mode, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateSampler");
-	cl_sampler ret = reallib_clCreateSampler(context, normalized_coords, addressing_mode, filter_mode, errcode_ret);
-	return ret;
-}
-
-
-cl_int clRetainSampler(cl_sampler sampler)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clRetainSampler");
-	cl_int ret = reallib_clRetainSampler(sampler);
-	return ret;
-}
-
-
-cl_int clReleaseSampler(cl_sampler sampler)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clReleaseSampler");
-	cl_int ret = reallib_clReleaseSampler(sampler);
-	return ret;
-}
-
-
-cl_int clGetSamplerInfo(cl_sampler sampler, cl_sampler_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetSamplerInfo");
-	cl_int ret = reallib_clGetSamplerInfo(sampler, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_program clCreateProgramWithSource(cl_context context, cl_uint count, const char ** strings, const size_t * lengths, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateProgramWithSource");
-	cl_program ret = reallib_clCreateProgramWithSource(context, count, strings, lengths, errcode_ret);
-	return ret;
-}
-
-
-cl_program clCreateProgramWithBinary(cl_context context, cl_uint num_devices, const cl_device_id * device_list, const size_t * lengths, const unsigned char ** binaries, cl_int * binary_status, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateProgramWithBinary");
-	cl_program ret = reallib_clCreateProgramWithBinary(context, num_devices, device_list, lengths, binaries, binary_status, errcode_ret);
-	return ret;
-}
-
-
-cl_int clRetainProgram(cl_program program)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clRetainProgram");
-	cl_int ret = reallib_clRetainProgram(program);
-	return ret;
-}
-
-
-cl_int clReleaseProgram(cl_program program)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clReleaseProgram");
-	cl_int ret = reallib_clReleaseProgram(program);
-	return ret;
-}
-
-
-cl_int clBuildProgram(cl_program program, cl_uint num_devices, const cl_device_id * device_list, const char * options, void (CL_CALLBACK * pfn_notify )(cl_program , void * ) , void * user_data)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clBuildProgram");
-	cl_int ret = reallib_clBuildProgram(program, num_devices, device_list, options, pfn_notify, user_data);
-	return ret;
-}
-
-
-cl_int clUnloadCompiler()  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clUnloadCompiler");
-	cl_int ret = reallib_clUnloadCompiler();
-	return ret;
-}
-
-
-cl_int clGetProgramInfo(cl_program program, cl_program_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetProgramInfo");
-	cl_int ret = reallib_clGetProgramInfo(program, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_int clGetProgramBuildInfo(cl_program program, cl_device_id device, cl_program_build_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetProgramBuildInfo");
-	cl_int ret = reallib_clGetProgramBuildInfo(program, device, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_kernel clCreateKernel(cl_program program, const char * kernel_name, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateKernel");
-	cl_kernel ret = reallib_clCreateKernel(program, kernel_name, errcode_ret);
-	return ret;
-}
-
-
-cl_int clCreateKernelsInProgram(cl_program program, cl_uint num_kernels, cl_kernel * kernels, cl_uint * num_kernels_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clCreateKernelsInProgram");
-	cl_int ret = reallib_clCreateKernelsInProgram(program, num_kernels, kernels, num_kernels_ret);
-	return ret;
-}
-
-
-cl_int clRetainKernel(cl_kernel kernel)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clRetainKernel");
-	cl_int ret = reallib_clRetainKernel(kernel);
-	return ret;
-}
-
-
-cl_int clReleaseKernel(cl_kernel kernel)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clReleaseKernel");
-	cl_int ret = reallib_clReleaseKernel(kernel);
-	return ret;
-}
-
-
-cl_int clSetKernelArg(cl_kernel kernel, cl_uint arg_index, size_t arg_size, const void * arg_value)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clSetKernelArg");
-	cl_int ret = reallib_clSetKernelArg(kernel, arg_index, arg_size, arg_value);
-	return ret;
-}
-
-
-cl_int clGetKernelInfo(cl_kernel kernel, cl_kernel_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetKernelInfo");
-	cl_int ret = reallib_clGetKernelInfo(kernel, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_int clGetKernelWorkGroupInfo(cl_kernel kernel, cl_device_id device, cl_kernel_work_group_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetKernelWorkGroupInfo");
-	cl_int ret = reallib_clGetKernelWorkGroupInfo(kernel, device, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_int clWaitForEvents(cl_uint num_events, const cl_event * event_list)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clWaitForEvents");
-	cl_int ret = reallib_clWaitForEvents(num_events, event_list);
-	return ret;
-}
-
-
-cl_int clGetEventInfo(cl_event event, cl_event_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetEventInfo");
-	cl_int ret = reallib_clGetEventInfo(event, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_event clCreateUserEvent(cl_context context, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clCreateUserEvent");
-	cl_event ret = reallib_clCreateUserEvent(context, errcode_ret);
-	return ret;
-}
-
-
-cl_int clRetainEvent(cl_event event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clRetainEvent");
-	cl_int ret = reallib_clRetainEvent(event);
-	return ret;
-}
-
-
-cl_int clReleaseEvent(cl_event event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clReleaseEvent");
-	cl_int ret = reallib_clReleaseEvent(event);
-	return ret;
-}
-
-
-cl_int clSetUserEventStatus(cl_event event, cl_int execution_status)  CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clSetUserEventStatus");
-	cl_int ret = reallib_clSetUserEventStatus(event, execution_status);
-	return ret;
-}
-
-
-cl_int clSetEventCallback(cl_event event, cl_int command_exec_callback_type, void (CL_CALLBACK * pfn_notify )(cl_event, cl_int, void *) , void * user_data)  CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clSetEventCallback");
-	cl_int ret = reallib_clSetEventCallback(event, command_exec_callback_type, pfn_notify, user_data);
-	return ret;
-}
-
-
-cl_int clGetEventProfilingInfo(cl_event event, cl_profiling_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetEventProfilingInfo");
-	cl_int ret = reallib_clGetEventProfilingInfo(event, param_name, param_value_size, param_value, param_value_size_ret);
-	return ret;
-}
-
-
-cl_int clFlush(cl_command_queue command_queue)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clFlush");
-	cl_int ret = reallib_clFlush(command_queue);
-	return ret;
-}
-
-
-cl_int clFinish(cl_command_queue command_queue)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clFinish");
-	cl_int ret = reallib_clFinish(command_queue);
-	return ret;
-}
-
-
-cl_int clEnqueueReadBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, size_t offset, size_t cb, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueReadBuffer");
-	cl_int ret = reallib_clEnqueueReadBuffer(command_queue, buffer, blocking_read, offset, cb, ptr, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueReadBufferRect(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, const size_t * buffer_origin, const size_t * host_origin, const size_t * region, size_t buffer_row_pitch, size_t buffer_slice_pitch, size_t host_row_pitch, size_t host_slice_pitch, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clEnqueueReadBufferRect");
-	cl_int ret = reallib_clEnqueueReadBufferRect(command_queue, buffer, blocking_read, buffer_origin, host_origin, region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueWriteBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, size_t offset, size_t cb, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueWriteBuffer");
-	cl_int ret = reallib_clEnqueueWriteBuffer(command_queue, buffer, blocking_write, offset, cb, ptr, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueWriteBufferRect(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, const size_t * buffer_origin, const size_t * host_origin, const size_t * region, size_t buffer_row_pitch, size_t buffer_slice_pitch, size_t host_row_pitch, size_t host_slice_pitch, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clEnqueueWriteBufferRect");
-	cl_int ret = reallib_clEnqueueWriteBufferRect(command_queue, buffer, blocking_write, buffer_origin, host_origin, region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueCopyBuffer(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, size_t src_offset, size_t dst_offset, size_t cb, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueCopyBuffer");
-	cl_int ret = reallib_clEnqueueCopyBuffer(command_queue, src_buffer, dst_buffer, src_offset, dst_offset, cb, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueCopyBufferRect(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, const size_t * src_origin, const size_t * dst_origin, const size_t * region, size_t src_row_pitch, size_t src_slice_pitch, size_t dst_row_pitch, size_t dst_slice_pitch, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_1 {
-	tracepoint(clust_provider, cl_function, "clEnqueueCopyBufferRect");
-	cl_int ret = reallib_clEnqueueCopyBufferRect(command_queue, src_buffer, dst_buffer, src_origin, dst_origin, region, src_row_pitch, src_slice_pitch, dst_row_pitch, dst_slice_pitch, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueReadImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_read, const size_t * origin, const size_t * region, size_t row_pitch, size_t slice_pitch, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueReadImage");
-	cl_int ret = reallib_clEnqueueReadImage(command_queue, image, blocking_read, &origin, &region, row_pitch, slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueWriteImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_write, const size_t * origin, const size_t * region, size_t input_row_pitch, size_t input_slice_pitch, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueWriteImage");
-	cl_int ret = reallib_clEnqueueWriteImage(command_queue, image, blocking_write, &origin, &region, input_row_pitch, input_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueCopyImage(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_image, const size_t * src_origin, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueCopyImage");
-	cl_int ret = reallib_clEnqueueCopyImage(command_queue, src_image, dst_image, &src_origin, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueCopyImageToBuffer(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_buffer, const size_t * src_origin, const size_t * region, size_t dst_offset, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueCopyImageToBuffer");
-	cl_int ret = reallib_clEnqueueCopyImageToBuffer(command_queue, src_image, dst_buffer, &src_origin, &region, dst_offset, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-cl_int clEnqueueCopyBufferToImage(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_image, size_t src_offset, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueCopyBufferToImage");
-	cl_int ret = reallib_clEnqueueCopyBufferToImage(command_queue, src_buffer, dst_image, src_offset, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
-
-
-void * clEnqueueMapBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_map, cl_map_flags map_flags, size_t offset, size_t cb, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueMapBuffer");
-	void * ret = reallib_clEnqueueMapBuffer(command_queue, buffer, blocking_map, map_flags, offset, cb, num_events_in_wait_list, event_wait_list, event, errcode_ret);
-	return ret;
-}
-
 
-void * clEnqueueMapImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_map, cl_map_flags map_flags, const size_t * origin, const size_t * region, size_t * image_row_pitch, size_t * image_slice_pitch, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueMapImage");
-	void * ret = reallib_clEnqueueMapImage(command_queue, image, blocking_map, map_flags, &origin, &region, image_row_pitch, image_slice_pitch, num_events_in_wait_list, event_wait_list, event, errcode_ret);
-	return ret;
 }
 
-
-cl_int clEnqueueUnmapMemObject(cl_command_queue command_queue, cl_mem memobj, void * mapped_ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueUnmapMemObject");
-	cl_int ret = reallib_clEnqueueUnmapMemObject(command_queue, memobj, mapped_ptr, num_events_in_wait_list, event_wait_list, event);
-	return ret;
-}
 
 const char* getCommandNameFromCommandID(cl_command_type command) {
 
@@ -741,7 +271,6 @@ const char* getCommandNameFromCommandID(cl_command_type command) {
 	return "ERROR: Unknown event type";
 }
 
-
 void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *user_data)
 {
 	cl_int * releaseEvent = (cl_int*) user_data;
@@ -752,18 +281,18 @@ void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *us
 
 	// Get event start time
 	cl_int ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
-	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_START returned %d\n", ret);
+	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_START returned %d\n", ret);
 	// Get event end time
 	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
-	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_END returned %d\n", ret);
+	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_END returned %d\n", ret);
 	// Get event command name (CL_COMMAND_NDRANGE_KERNEL, CL_COMMAND_WRITE_BUFFER, ...)
 	ret = reallib_clGetEventInfo(event,CL_EVENT_COMMAND_TYPE,sizeof(cl_command_type), &command, NULL);
-	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_TYPE returned %d\n", ret);
+	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_TYPE returned %d\n", ret);
 	// Get event queue id
 	ret = reallib_clGetEventInfo(event,CL_EVENT_COMMAND_QUEUE,sizeof(cl_command_queue), &queue, NULL);
-	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_QUEUE returned %d\n", ret);
+	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_QUEUE returned %d\n", ret);
 	// Record with UST tracepoint
-	//tracepoint(clust_provider, clust_device_event, queue, command, start, end);
+	tracepoint(clust_provider, clust_device_event, (ulong)queue, command, start, end);
 #ifdef __DEBUG__
 	struct timespec ts;
 	clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -786,9 +315,691 @@ void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *us
 	}
 }
 
-cl_int clEnqueueNDRangeKernel(cl_command_queue command_queue, cl_kernel kernel, cl_uint work_dim, const size_t * global_work_offset, const size_t * global_work_size, const size_t * local_work_size, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueNDRangeKernel");
 
+cl_int clGetPlatformIDs(cl_uint num_entries, cl_platform_id * platforms, cl_uint * num_platforms)  {
+	tracepoint(clust_provider, cl_function, "clGetPlatformIDs", 0);
+	cl_int ret = reallib_clGetPlatformIDs(num_entries, platforms, num_platforms);
+	tracepoint(clust_provider, cl_function, "clGetPlatformIDs", 1);
+	return ret;
+}
+
+
+cl_int clGetPlatformInfo(cl_platform_id platform, cl_platform_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetPlatformInfo", 0);
+	cl_int ret = reallib_clGetPlatformInfo(platform, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetPlatformInfo", 1);
+	return ret;
+}
+
+
+cl_int clGetDeviceIDs(cl_platform_id platform, cl_device_type device_type, cl_uint num_entries, cl_device_id * devices, cl_uint * num_devices)  {
+	tracepoint(clust_provider, cl_function, "clGetDeviceIDs", 0);
+	cl_int ret = reallib_clGetDeviceIDs(platform, device_type, num_entries, devices, num_devices);
+	tracepoint(clust_provider, cl_function, "clGetDeviceIDs", 1);
+	return ret;
+}
+
+
+cl_int clGetDeviceInfo(cl_device_id device, cl_device_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetDeviceInfo", 0);
+	cl_int ret = reallib_clGetDeviceInfo(device, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetDeviceInfo", 1);
+	return ret;
+}
+
+
+cl_context clCreateContext(const cl_context_properties * properties, cl_uint num_devices, const cl_device_id * devices, void (CL_CALLBACK * pfn_notify )(const char *, const void *, size_t, void *) , void * param_4, cl_int * user_data)  {
+	tracepoint(clust_provider, cl_function, "clCreateContext", 0);
+	cl_context ret = reallib_clCreateContext(properties, num_devices, devices, pfn_notify, param_4, user_data);
+	tracepoint(clust_provider, cl_function, "clCreateContext", 1);
+	return ret;
+}
+
+
+cl_context clCreateContextFromType(const cl_context_properties * properties, cl_device_type device_type, void (CL_CALLBACK * pfn_notify )(const char *, const void *, size_t, void *) , void * param_3, cl_int * user_data)  {
+	tracepoint(clust_provider, cl_function, "clCreateContextFromType", 0);
+	cl_context ret = reallib_clCreateContextFromType(properties, device_type, pfn_notify, param_3, user_data);
+	tracepoint(clust_provider, cl_function, "clCreateContextFromType", 1);
+	return ret;
+}
+
+
+cl_int clRetainContext(cl_context context)  {
+	tracepoint(clust_provider, cl_function, "clRetainContext", 0);
+	cl_int ret = reallib_clRetainContext(context);
+	tracepoint(clust_provider, cl_function, "clRetainContext", 1);
+	return ret;
+}
+
+
+cl_int clReleaseContext(cl_context context)  {
+	tracepoint(clust_provider, cl_function, "clReleaseContext", 0);
+	cl_int ret = reallib_clReleaseContext(context);
+	tracepoint(clust_provider, cl_function, "clReleaseContext", 1);
+	return ret;
+}
+
+
+cl_int clGetContextInfo(cl_context context, cl_context_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetContextInfo", 0);
+	cl_int ret = reallib_clGetContextInfo(context, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetContextInfo", 1);
+	return ret;
+}
+
+
+cl_command_queue clCreateCommandQueue(cl_context context, cl_device_id device, cl_command_queue_properties properties, cl_int * errcode_ret)  {
+	properties |= CL_QUEUE_PROFILING_ENABLE;
+	tracepoint(clust_provider, cl_function, "clCreateCommandQueue", 0);
+	cl_command_queue ret = reallib_clCreateCommandQueue(context, device, properties, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateCommandQueue", 1);
+	return ret;
+}
+
+
+cl_int clRetainCommandQueue(cl_command_queue command_queue)  {
+	tracepoint(clust_provider, cl_function, "clRetainCommandQueue", 0);
+	cl_int ret = reallib_clRetainCommandQueue(command_queue);
+	tracepoint(clust_provider, cl_function, "clRetainCommandQueue", 1);
+	return ret;
+}
+
+
+cl_int clReleaseCommandQueue(cl_command_queue command_queue)  {
+	tracepoint(clust_provider, cl_function, "clReleaseCommandQueue", 0);
+	cl_int ret = reallib_clReleaseCommandQueue(command_queue);
+	tracepoint(clust_provider, cl_function, "clReleaseCommandQueue", 1);
+	return ret;
+}
+
+
+cl_int clGetCommandQueueInfo(cl_command_queue command_queue, cl_command_queue_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetCommandQueueInfo", 0);
+	cl_int ret = reallib_clGetCommandQueueInfo(command_queue, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetCommandQueueInfo", 1);
+	return ret;
+}
+
+
+cl_mem clCreateBuffer(cl_context context, cl_mem_flags flags, size_t size, void * host_ptr, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateBuffer", 0);
+	cl_mem ret = reallib_clCreateBuffer(context, flags, size, host_ptr, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateBuffer", 1);
+	return ret;
+}
+
+
+cl_mem clCreateSubBuffer(cl_mem buffer, cl_mem_flags flags, cl_buffer_create_type buffer_create_type, const void * buffer_create_info, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateSubBuffer", 0);
+	cl_mem ret = reallib_clCreateSubBuffer(buffer, flags, buffer_create_type, buffer_create_info, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateSubBuffer", 1);
+	return ret;
+}
+
+
+cl_mem clCreateImage2D(cl_context context, cl_mem_flags flags, const cl_image_format * image_format, size_t image_width, size_t image_height, size_t image_row_pitch, void * host_ptr, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateImage2D", 0);
+	cl_mem ret = reallib_clCreateImage2D(context, flags, image_format, image_width, image_height, image_row_pitch, host_ptr, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateImage2D", 1);
+	return ret;
+}
+
+
+cl_mem clCreateImage3D(cl_context context, cl_mem_flags flags, const cl_image_format * image_format, size_t image_width, size_t image_height, size_t image_depth, size_t image_row_pitch, size_t image_slice_pitch, void * host_ptr, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateImage3D", 0);
+	cl_mem ret = reallib_clCreateImage3D(context, flags, image_format, image_width, image_height, image_depth, image_row_pitch, image_slice_pitch, host_ptr, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateImage3D", 1);
+	return ret;
+}
+
+
+cl_int clRetainMemObject(cl_mem memobj)  {
+	tracepoint(clust_provider, cl_function, "clRetainMemObject", 0);
+	cl_int ret = reallib_clRetainMemObject(memobj);
+	tracepoint(clust_provider, cl_function, "clRetainMemObject", 1);
+	return ret;
+}
+
+
+cl_int clReleaseMemObject(cl_mem memobj)  {
+	tracepoint(clust_provider, cl_function, "clReleaseMemObject", 0);
+	cl_int ret = reallib_clReleaseMemObject(memobj);
+	tracepoint(clust_provider, cl_function, "clReleaseMemObject", 1);
+	return ret;
+}
+
+
+cl_int clGetSupportedImageFormats(cl_context context, cl_mem_flags flags, cl_mem_object_type image_type, cl_uint num_entries, cl_image_format * image_formats, cl_uint * num_image_formats)  {
+	tracepoint(clust_provider, cl_function, "clGetSupportedImageFormats", 0);
+	cl_int ret = reallib_clGetSupportedImageFormats(context, flags, image_type, num_entries, image_formats, num_image_formats);
+	tracepoint(clust_provider, cl_function, "clGetSupportedImageFormats", 1);
+	return ret;
+}
+
+
+cl_int clGetMemObjectInfo(cl_mem memobj, cl_mem_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetMemObjectInfo", 0);
+	cl_int ret = reallib_clGetMemObjectInfo(memobj, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetMemObjectInfo", 1);
+	return ret;
+}
+
+
+cl_int clGetImageInfo(cl_mem image, cl_image_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetImageInfo", 0);
+	cl_int ret = reallib_clGetImageInfo(image, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetImageInfo", 1);
+	return ret;
+}
+
+
+cl_int clSetMemObjectDestructorCallback(cl_mem memobj, void (CL_CALLBACK * pfn_notify )( cl_mem , void* ) , void * user_data)  {
+	tracepoint(clust_provider, cl_function, "clSetMemObjectDestructorCallback", 0);
+	cl_int ret = reallib_clSetMemObjectDestructorCallback(memobj, pfn_notify, user_data);
+	tracepoint(clust_provider, cl_function, "clSetMemObjectDestructorCallback", 1);
+	return ret;
+}
+
+
+cl_sampler clCreateSampler(cl_context context, cl_bool normalized_coords, cl_addressing_mode addressing_mode, cl_filter_mode filter_mode, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateSampler", 0);
+	cl_sampler ret = reallib_clCreateSampler(context, normalized_coords, addressing_mode, filter_mode, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateSampler", 1);
+	return ret;
+}
+
+
+cl_int clRetainSampler(cl_sampler sampler)  {
+	tracepoint(clust_provider, cl_function, "clRetainSampler", 0);
+	cl_int ret = reallib_clRetainSampler(sampler);
+	tracepoint(clust_provider, cl_function, "clRetainSampler", 1);
+	return ret;
+}
+
+
+cl_int clReleaseSampler(cl_sampler sampler)  {
+	tracepoint(clust_provider, cl_function, "clReleaseSampler", 0);
+	cl_int ret = reallib_clReleaseSampler(sampler);
+	tracepoint(clust_provider, cl_function, "clReleaseSampler", 1);
+	return ret;
+}
+
+
+cl_int clGetSamplerInfo(cl_sampler sampler, cl_sampler_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetSamplerInfo", 0);
+	cl_int ret = reallib_clGetSamplerInfo(sampler, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetSamplerInfo", 1);
+	return ret;
+}
+
+
+cl_program clCreateProgramWithSource(cl_context context, cl_uint count, const char ** strings, const size_t * lengths, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateProgramWithSource", 0);
+	cl_program ret = reallib_clCreateProgramWithSource(context, count, strings, lengths, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateProgramWithSource", 1);
+	return ret;
+}
+
+
+cl_program clCreateProgramWithBinary(cl_context context, cl_uint num_devices, const cl_device_id * device_list, const size_t * lengths, const unsigned char ** binaries, cl_int * binary_status, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateProgramWithBinary", 0);
+	cl_program ret = reallib_clCreateProgramWithBinary(context, num_devices, device_list, lengths, binaries, binary_status, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateProgramWithBinary", 1);
+	return ret;
+}
+
+
+cl_int clRetainProgram(cl_program program)  {
+	tracepoint(clust_provider, cl_function, "clRetainProgram", 0);
+	cl_int ret = reallib_clRetainProgram(program);
+	tracepoint(clust_provider, cl_function, "clRetainProgram", 1);
+	return ret;
+}
+
+
+cl_int clReleaseProgram(cl_program program)  {
+	tracepoint(clust_provider, cl_function, "clReleaseProgram", 0);
+	cl_int ret = reallib_clReleaseProgram(program);
+	tracepoint(clust_provider, cl_function, "clReleaseProgram", 1);
+	return ret;
+}
+
+
+cl_int clBuildProgram(cl_program program, cl_uint num_devices, const cl_device_id * device_list, const char * options, void (CL_CALLBACK * pfn_notify )(cl_program , void * ) , void * user_data)  {
+	tracepoint(clust_provider, cl_function, "clBuildProgram", 0);
+	cl_int ret = reallib_clBuildProgram(program, num_devices, device_list, options, pfn_notify, user_data);
+	tracepoint(clust_provider, cl_function, "clBuildProgram", 1);
+	return ret;
+}
+
+
+cl_int clUnloadCompiler()  {
+	tracepoint(clust_provider, cl_function, "clUnloadCompiler", 0);
+	cl_int ret = reallib_clUnloadCompiler();
+	tracepoint(clust_provider, cl_function, "clUnloadCompiler", 1);
+	return ret;
+}
+
+
+cl_int clGetProgramInfo(cl_program program, cl_program_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetProgramInfo", 0);
+	cl_int ret = reallib_clGetProgramInfo(program, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetProgramInfo", 1);
+	return ret;
+}
+
+
+cl_int clGetProgramBuildInfo(cl_program program, cl_device_id device, cl_program_build_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetProgramBuildInfo", 0);
+	cl_int ret = reallib_clGetProgramBuildInfo(program, device, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetProgramBuildInfo", 1);
+	return ret;
+}
+
+
+cl_kernel clCreateKernel(cl_program program, const char * kernel_name, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateKernel", 0);
+	cl_kernel ret = reallib_clCreateKernel(program, kernel_name, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateKernel", 1);
+	return ret;
+}
+
+
+cl_int clCreateKernelsInProgram(cl_program program, cl_uint num_kernels, cl_kernel * kernels, cl_uint * num_kernels_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateKernelsInProgram", 0);
+	cl_int ret = reallib_clCreateKernelsInProgram(program, num_kernels, kernels, num_kernels_ret);
+	tracepoint(clust_provider, cl_function, "clCreateKernelsInProgram", 1);
+	return ret;
+}
+
+
+cl_int clRetainKernel(cl_kernel kernel)  {
+	tracepoint(clust_provider, cl_function, "clRetainKernel", 0);
+	cl_int ret = reallib_clRetainKernel(kernel);
+	tracepoint(clust_provider, cl_function, "clRetainKernel", 1);
+	return ret;
+}
+
+
+cl_int clReleaseKernel(cl_kernel kernel)  {
+	tracepoint(clust_provider, cl_function, "clReleaseKernel", 0);
+	cl_int ret = reallib_clReleaseKernel(kernel);
+	tracepoint(clust_provider, cl_function, "clReleaseKernel", 1);
+	return ret;
+}
+
+
+cl_int clSetKernelArg(cl_kernel kernel, cl_uint arg_index, size_t arg_size, const void * arg_value)  {
+	tracepoint(clust_provider, cl_function, "clSetKernelArg", 0);
+	cl_int ret = reallib_clSetKernelArg(kernel, arg_index, arg_size, arg_value);
+	tracepoint(clust_provider, cl_function, "clSetKernelArg", 1);
+	return ret;
+}
+
+
+cl_int clGetKernelInfo(cl_kernel kernel, cl_kernel_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetKernelInfo", 0);
+	cl_int ret = reallib_clGetKernelInfo(kernel, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetKernelInfo", 1);
+	return ret;
+}
+
+
+cl_int clGetKernelWorkGroupInfo(cl_kernel kernel, cl_device_id device, cl_kernel_work_group_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetKernelWorkGroupInfo", 0);
+	cl_int ret = reallib_clGetKernelWorkGroupInfo(kernel, device, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetKernelWorkGroupInfo", 1);
+	return ret;
+}
+
+
+cl_int clWaitForEvents(cl_uint num_events, const cl_event * event_list)  {
+	tracepoint(clust_provider, cl_function, "clWaitForEvents", 0);
+	cl_int ret = reallib_clWaitForEvents(num_events, event_list);
+	tracepoint(clust_provider, cl_function, "clWaitForEvents", 1);
+	return ret;
+}
+
+
+cl_int clGetEventInfo(cl_event event, cl_event_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetEventInfo", 0);
+	cl_int ret = reallib_clGetEventInfo(event, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetEventInfo", 1);
+	return ret;
+}
+
+
+cl_event clCreateUserEvent(cl_context context, cl_int * errcode_ret)  {
+	tracepoint(clust_provider, cl_function, "clCreateUserEvent", 0);
+	cl_event ret = reallib_clCreateUserEvent(context, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clCreateUserEvent", 1);
+	return ret;
+}
+
+
+cl_int clRetainEvent(cl_event event)  {
+	tracepoint(clust_provider, cl_function, "clRetainEvent", 0);
+	cl_int ret = reallib_clRetainEvent(event);
+	tracepoint(clust_provider, cl_function, "clRetainEvent", 1);
+	return ret;
+}
+
+
+cl_int clReleaseEvent(cl_event event)  {
+	tracepoint(clust_provider, cl_function, "clReleaseEvent", 0);
+	cl_int ret = reallib_clReleaseEvent(event);
+	tracepoint(clust_provider, cl_function, "clReleaseEvent", 1);
+	return ret;
+}
+
+
+cl_int clSetUserEventStatus(cl_event event, cl_int execution_status)  {
+	tracepoint(clust_provider, cl_function, "clSetUserEventStatus", 0);
+	cl_int ret = reallib_clSetUserEventStatus(event, execution_status);
+	tracepoint(clust_provider, cl_function, "clSetUserEventStatus", 1);
+	return ret;
+}
+
+
+cl_int clSetEventCallback(cl_event event, cl_int command_exec_callback_type, void (CL_CALLBACK * pfn_notify )(cl_event, cl_int, void *) , void * user_data)  {
+	tracepoint(clust_provider, cl_function, "clSetEventCallback", 0);
+	cl_int ret = reallib_clSetEventCallback(event, command_exec_callback_type, pfn_notify, user_data);
+	tracepoint(clust_provider, cl_function, "clSetEventCallback", 1);
+	return ret;
+}
+
+
+cl_int clGetEventProfilingInfo(cl_event event, cl_profiling_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  {
+	tracepoint(clust_provider, cl_function, "clGetEventProfilingInfo", 0);
+	cl_int ret = reallib_clGetEventProfilingInfo(event, param_name, param_value_size, param_value, param_value_size_ret);
+	tracepoint(clust_provider, cl_function, "clGetEventProfilingInfo", 1);
+	return ret;
+}
+
+
+cl_int clFlush(cl_command_queue command_queue)  {
+	tracepoint(clust_provider, cl_function, "clFlush", 0);
+	cl_int ret = reallib_clFlush(command_queue);
+	tracepoint(clust_provider, cl_function, "clFlush", 1);
+	return ret;
+}
+
+
+cl_int clFinish(cl_command_queue command_queue)  {
+	tracepoint(clust_provider, cl_function, "clFinish", 0);
+	cl_int ret = reallib_clFinish(command_queue);
+	tracepoint(clust_provider, cl_function, "clFinish", 1);
+	return ret;
+}
+
+
+cl_int clEnqueueReadBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, size_t offset, size_t cb, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueReadBuffer: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueReadBuffer", 0);
+	cl_int ret = reallib_clEnqueueReadBuffer(command_queue, buffer, blocking_read, offset, cb, ptr, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueReadBuffer", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadBuffer->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueReadBufferRect(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, const size_t * buffer_origin, const size_t * host_origin, const size_t * region, size_t buffer_row_pitch, size_t buffer_slice_pitch, size_t host_row_pitch, size_t host_slice_pitch, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueReadBufferRect: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueReadBufferRect", 0);
+	cl_int ret = reallib_clEnqueueReadBufferRect(command_queue, buffer, blocking_read, buffer_origin, host_origin, region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueReadBufferRect", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadBufferRect->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueWriteBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, size_t offset, size_t cb, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueWriteBuffer: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueWriteBuffer", 0);
+	cl_int ret = reallib_clEnqueueWriteBuffer(command_queue, buffer, blocking_write, offset, cb, ptr, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueWriteBuffer", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteBuffer->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueWriteBufferRect(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, const size_t * buffer_origin, const size_t * host_origin, const size_t * region, size_t buffer_row_pitch, size_t buffer_slice_pitch, size_t host_row_pitch, size_t host_slice_pitch, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueWriteBufferRect: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueWriteBufferRect", 0);
+	cl_int ret = reallib_clEnqueueWriteBufferRect(command_queue, buffer, blocking_write, buffer_origin, host_origin, region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueWriteBufferRect", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteBufferRect->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueCopyBuffer(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, size_t src_offset, size_t dst_offset, size_t cb, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueCopyBuffer: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyBuffer", 0);
+	cl_int ret = reallib_clEnqueueCopyBuffer(command_queue, src_buffer, dst_buffer, src_offset, dst_offset, cb, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyBuffer", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBuffer->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueCopyBufferRect(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, const size_t * src_origin, const size_t * dst_origin, const size_t * region, size_t src_row_pitch, size_t src_slice_pitch, size_t dst_row_pitch, size_t dst_slice_pitch, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueCopyBufferRect: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyBufferRect", 0);
+	cl_int ret = reallib_clEnqueueCopyBufferRect(command_queue, src_buffer, dst_buffer, src_origin, dst_origin, region, src_row_pitch, src_slice_pitch, dst_row_pitch, dst_slice_pitch, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyBufferRect", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBufferRect->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueReadImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_read, const size_t * origin, const size_t * region, size_t row_pitch, size_t slice_pitch, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueReadImage: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueReadImage", 0);
+	cl_int ret = reallib_clEnqueueReadImage(command_queue, image, blocking_read, &origin, &region, row_pitch, slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueReadImage", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadImage->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueWriteImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_write, const size_t * origin, const size_t * region, size_t input_row_pitch, size_t input_slice_pitch, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueWriteImage: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueWriteImage", 0);
+	cl_int ret = reallib_clEnqueueWriteImage(command_queue, image, blocking_write, &origin, &region, input_row_pitch, input_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueWriteImage", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteImage->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueCopyImage(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_image, const size_t * src_origin, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueCopyImage: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyImage", 0);
+	cl_int ret = reallib_clEnqueueCopyImage(command_queue, src_image, dst_image, &src_origin, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyImage", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyImage->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueCopyImageToBuffer(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_buffer, const size_t * src_origin, const size_t * region, size_t dst_offset, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueCopyImageToBuffer: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyImageToBuffer", 0);
+	cl_int ret = reallib_clEnqueueCopyImageToBuffer(command_queue, src_image, dst_buffer, &src_origin, &region, dst_offset, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyImageToBuffer", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyImageToBuffer->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueCopyBufferToImage(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_image, size_t src_offset, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueCopyBufferToImage: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyBufferToImage", 0);
+	cl_int ret = reallib_clEnqueueCopyBufferToImage(command_queue, src_buffer, dst_image, src_offset, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueCopyBufferToImage", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBufferToImage->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+void * clEnqueueMapBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_map, cl_map_flags map_flags, size_t offset, size_t cb, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event, cl_int * errcode_ret)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueMapBuffer: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueMapBuffer", 0);
+	void * ret = reallib_clEnqueueMapBuffer(command_queue, buffer, blocking_map, map_flags, offset, cb, num_events_in_wait_list, event_wait_list, event, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clEnqueueMapBuffer", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMapBuffer->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+void * clEnqueueMapImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_map, cl_map_flags map_flags, const size_t * origin, const size_t * region, size_t * image_row_pitch, size_t * image_slice_pitch, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event, cl_int * errcode_ret)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueMapImage: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueMapImage", 0);
+	void * ret = reallib_clEnqueueMapImage(command_queue, image, blocking_map, map_flags, &origin, &region, image_row_pitch, image_slice_pitch, num_events_in_wait_list, event_wait_list, event, errcode_ret);
+	tracepoint(clust_provider, cl_function, "clEnqueueMapImage", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMapImage->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueUnmapMemObject(cl_command_queue command_queue, cl_mem memobj, void * mapped_ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueUnmapMemObject: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueUnmapMemObject", 0);
+	cl_int ret = reallib_clEnqueueUnmapMemObject(command_queue, memobj, mapped_ptr, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueUnmapMemObject", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueUnmapMemObject->clSetEventCallback:error->%d\n", r);
+
+	return ret;
+}
+
+
+cl_int clEnqueueNDRangeKernel(cl_command_queue command_queue, cl_kernel kernel, cl_uint work_dim, const size_t * global_work_offset, const size_t * global_work_size, const size_t * local_work_size, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
 	bool toDelete = false;
 	if(event == NULL) {
 		fprintf(stdout, "CLUST::clEnqueueNDRangeKernel: Creating event dynamically...\n");
@@ -796,57 +1007,98 @@ cl_int clEnqueueNDRangeKernel(cl_command_queue command_queue, cl_kernel kernel, 
 		toDelete = true;
 	}
 
+	tracepoint(clust_provider, cl_function, "clEnqueueNDRangeKernel", 0);
 	cl_int ret = reallib_clEnqueueNDRangeKernel(command_queue, kernel, work_dim, global_work_offset, global_work_size, local_work_size, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueNDRangeKernel", 1);
 
-	int r = clSetEventCallback(*event, CL_COMPLETE,
-			&eventCompleted,
-			(toDelete)?&ev_delete:&ev_keep
-					);
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueNDRangeKernel->clSetEventCallback:error->%d\n", r);
 
 	return ret;
 }
 
 
-cl_int clEnqueueTask(cl_command_queue command_queue, cl_kernel kernel, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueTask");
+cl_int clEnqueueTask(cl_command_queue command_queue, cl_kernel kernel, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueTask: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueTask", 0);
 	cl_int ret = reallib_clEnqueueTask(command_queue, kernel, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueTask", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueTask->clSetEventCallback:error->%d\n", r);
+
 	return ret;
 }
 
 
-cl_int clEnqueueNativeKernel(cl_command_queue command_queue, void (*user_func)(void *) , void * args, size_t cb_args, cl_uint num_mem_objects, const cl_mem * mem_list, const void ** args_mem_loc, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueNativeKernel");
+cl_int clEnqueueNativeKernel(cl_command_queue command_queue, void (*user_func)(void *) , void * args, size_t cb_args, cl_uint num_mem_objects, const cl_mem * mem_list, const void ** args_mem_loc, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueNativeKernel: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueNativeKernel", 0);
 	cl_int ret = reallib_clEnqueueNativeKernel(command_queue, user_func, args, cb_args, num_mem_objects, mem_list, args_mem_loc, num_events_in_wait_list, event_wait_list, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueNativeKernel", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueNativeKernel->clSetEventCallback:error->%d\n", r);
+
 	return ret;
 }
 
 
-cl_int clEnqueueMarker(cl_command_queue command_queue, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueMarker");
+cl_int clEnqueueMarker(cl_command_queue command_queue, cl_event * event)  {
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueMarker: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
+	tracepoint(clust_provider, cl_function, "clEnqueueMarker", 0);
 	cl_int ret = reallib_clEnqueueMarker(command_queue, event);
+	tracepoint(clust_provider, cl_function, "clEnqueueMarker", 1);
+
+	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMarker->clSetEventCallback:error->%d\n", r);
+
 	return ret;
 }
 
 
-cl_int clEnqueueWaitForEvents(cl_command_queue command_queue, cl_uint num_events, const cl_event * event_list)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueWaitForEvents");
+cl_int clEnqueueWaitForEvents(cl_command_queue command_queue, cl_uint num_events, const cl_event * event_list)  {
+	tracepoint(clust_provider, cl_function, "clEnqueueWaitForEvents", 0);
 	cl_int ret = reallib_clEnqueueWaitForEvents(command_queue, num_events, event_list);
+	tracepoint(clust_provider, cl_function, "clEnqueueWaitForEvents", 1);
 	return ret;
 }
 
 
-cl_int clEnqueueBarrier(cl_command_queue command_queue)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clEnqueueBarrier");
+cl_int clEnqueueBarrier(cl_command_queue command_queue)  {
+	tracepoint(clust_provider, cl_function, "clEnqueueBarrier", 0);
 	cl_int ret = reallib_clEnqueueBarrier(command_queue);
+	tracepoint(clust_provider, cl_function, "clEnqueueBarrier", 1);
 	return ret;
 }
 
 
-void * clGetExtensionFunctionAddress(const char * func_name)  CL_API_SUFFIX__VERSION_1_0 {
-	tracepoint(clust_provider, cl_function, "clGetExtensionFunctionAddress");
+void * clGetExtensionFunctionAddress(const char * func_name)  {
+	tracepoint(clust_provider, cl_function, "clGetExtensionFunctionAddress", 0);
 	void * ret = reallib_clGetExtensionFunctionAddress(func_name);
+	tracepoint(clust_provider, cl_function, "clGetExtensionFunctionAddress", 1);
 	return ret;
 }
+
+
 
 #ifdef __cplusplus
 }

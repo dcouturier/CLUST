@@ -7,7 +7,7 @@
 
 int main(int argc, char **argv) {
 	printf("hello\n");
-	tracepoint(clust_provider, cl_function, "ALL RIGHT!!!");
+	tracepoint(clust_provider, cl_function, "ALL RIGHT!!!",0);
 	cl_platform_id ids;
 	cl_int count;
 	clGetPlatformIDs(0, &ids, &count);

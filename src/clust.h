@@ -1,7 +1,7 @@
 #ifndef CLUST_H_
 #define CLUST_H_
 
-#define __DEBUG__
+//#define __DEBUG__
 
 #include <CL/cl.h>
 #define LIB_NAME "libCLUST"
