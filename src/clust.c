@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "clust.h"
+#include <time.h>
 
 #define TRACEPOINT_DEFINE
 #define TRACEPOINT_CREATE_PROBES
@@ -12,6 +13,10 @@
 #ifdef __cplusplus
 "C" {
 #endif
+
+
+cl_int ev_delete = 1;
+cl_int ev_keep = 0;
 
 cl_api_call_clGetPlatformIDs reallib_clGetPlatformIDs;
 cl_api_call_clGetPlatformInfo reallib_clGetPlatformInfo;
@@ -107,9 +112,6 @@ __attribute__((constructor)) void libCLUST() {
 		fprintf(stderr, "%s: Unable to load %s\n", LIB_NAME, LIBCL_NAME);
 		exit(EXIT_FAILURE);
 	}
-
-	//tracef("Raplacing OpenCL symbols...\n");
-
 	dlerror();
 	reallib_clGetPlatformIDs = (cl_api_call_clGetPlatformIDs) dlSymFunction(libcl_ptr, "clGetPlatformIDs");
 	reallib_clGetPlatformInfo = (cl_api_call_clGetPlatformInfo) dlSymFunction(libcl_ptr, "clGetPlatformInfo");
@@ -186,14 +188,22 @@ __attribute__((constructor)) void libCLUST() {
 	reallib_clGetExtensionFunctionAddress = (cl_api_call_clGetExtensionFunctionAddress) dlSymFunction(libcl_ptr, "clGetExtensionFunctionAddress");
 }
 
-
+cl_int clGetPlatformIDs(cl_uint num_entries, cl_platform_id * platforms,
+                            cl_uint * num_platforms) {
+        // Trace API call begin
+        tracepoint(clust_provider, cl_function, "clGetPlatformIDs");
+        // Call to the real OpenCL library
+        cl_int ret = reallib_clGetPlatformIDs(num_entries, platforms, num_platforms);
+        // Trace API call end
+//        tracepoint(clust_provider, cl_function, "clGetPlatformIDs", false);
+        return ret;
+    }
+/*
 cl_int clGetPlatformIDs(cl_uint num_entries, cl_platform_id * platforms, cl_uint * num_platforms)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, cl_function, "clGetPlatformIDs");
-	//tracepoint(my_provider, my_first_tracepoint, 1, "");
-	//tracef("clGetPlatformIDs");
 	cl_int ret = reallib_clGetPlatformIDs(num_entries, platforms, num_platforms);
 	return ret;
-}
+}*/
 
 
 cl_int clGetPlatformInfo(cl_platform_id platform, cl_platform_info param_name, size_t param_value_size, void * param_value, size_t * param_value_size_ret)  CL_API_SUFFIX__VERSION_1_0 {
@@ -254,6 +264,7 @@ cl_int clGetContextInfo(cl_context context, cl_context_info param_name, size_t p
 
 cl_command_queue clCreateCommandQueue(cl_context context, cl_device_id device, cl_command_queue_properties properties, cl_int * errcode_ret)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, cl_function, "clCreateCommandQueue");
+	properties |= CL_QUEUE_PROFILING_ENABLE;
 	cl_command_queue ret = reallib_clCreateCommandQueue(context, device, properties, errcode_ret);
 	return ret;
 }
@@ -650,10 +661,148 @@ cl_int clEnqueueUnmapMemObject(cl_command_queue command_queue, cl_mem memobj, vo
 	return ret;
 }
 
+const char* getCommandNameFromCommandID(cl_command_type command) {
+
+	switch(command) {
+	case CL_COMMAND_NDRANGE_KERNEL:
+		return "CL_COMMAND_NDRANGE_KERNEL";
+		break;
+	case CL_COMMAND_TASK:
+		return "CL_COMMAND_TASK";
+		break;
+	case CL_COMMAND_NATIVE_KERNEL:
+		return "CL_COMMAND_NATIVE_KERNEL";
+		break;
+	case CL_COMMAND_READ_BUFFER:
+		return "CL_COMMAND_READ_BUFFER";
+		break;
+	case CL_COMMAND_WRITE_BUFFER:
+		return "CL_COMMAND_WRITE_BUFFER";
+		break;
+	case CL_COMMAND_COPY_BUFFER:
+		return "CL_COMMAND_COPY_BUFFER";
+		break;
+	case CL_COMMAND_READ_IMAGE:
+		return "CL_COMMAND_READ_IMAGE";
+		break;
+	case CL_COMMAND_WRITE_IMAGE:
+		return "CL_COMMAND_WRITE_IMAGE";
+		break;
+	case CL_COMMAND_COPY_IMAGE:
+		return "CL_COMMAND_COPY_IMAGE";
+		break;
+	case CL_COMMAND_COPY_BUFFER_TO_IMAGE:
+		return "CL_COMMAND_COPY_BUFFER_TO_IMAGE";
+		break;
+	case CL_COMMAND_MAP_BUFFER:
+		return "CL_COMMAND_MAP_BUFFER";
+		break;
+	case CL_COMMAND_MAP_IMAGE:
+		return "CL_COMMAND_MAP_IMAGE";
+		break;
+	case CL_COMMAND_UNMAP_MEM_OBJECT:
+		return "CL_COMMAND_UNMAP_MEM_OBJECT";
+		break;
+	case CL_COMMAND_MARKER:
+		return "CL_COMMAND_MARKER";
+		break;
+	case CL_COMMAND_ACQUIRE_GL_OBJECTS:
+		return "CL_COMMAND_ACQUIRE_GL_OBJECTS";
+		break;
+	case CL_COMMAND_RELEASE_GL_OBJECTS:
+		return "CL_COMMAND_RELEASE_GL_OBJECTS";
+		break;
+	case CL_COMMAND_READ_BUFFER_RECT:
+		return "CL_COMMAND_READ_BUFFER_RECT";
+		break;
+	case CL_COMMAND_WRITE_BUFFER_RECT:
+		return "CL_COMMAND_WRITE_BUFFER_RECT";
+		break;
+	case CL_COMMAND_COPY_BUFFER_RECT:
+		return "CL_COMMAND_COPY_BUFFER_RECT";
+		break;
+	case CL_COMMAND_USER:
+		return "CL_COMMAND_USER";
+		break;
+#ifdef cl_khr_gl_event
+	case CL_COMMAND_GL_FENCE_SYNC_OBJECT_KHR :
+		return "CL_COMMAND_GL_FENCE_SYNC_OBJECT_KHR";
+		break;
+#endif
+#ifdef cl_khr_d3d10_sharing
+	case CL_COMMAND_ACQUIRE_D3D10_OBJECTS_KHR :
+		return "CL_COMMAND_ACQUIRE_D3D10_OBJECTS_KHR";
+		break;
+	case CL_COMMAND_RELEASE_D3D10_OBJECTS_KHR :
+		return "CL_COMMAND_RELEASE_D3D10_OBJECTS_KHR";
+		break;
+#endif
+	}
+	return "ERROR: Unknown event type";
+}
+
+
+void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *user_data)
+{
+	cl_int * releaseEvent = (cl_int*) user_data;
+	cl_ulong start = 0;
+	cl_ulong end = 0;
+	cl_command_type command;
+	cl_command_queue queue;
+
+	// Get event start time
+	cl_int ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
+	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_START returned %d\n", ret);
+	// Get event end time
+	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
+	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_END returned %d\n", ret);
+	// Get event command name (CL_COMMAND_NDRANGE_KERNEL, CL_COMMAND_WRITE_BUFFER, ...)
+	ret = reallib_clGetEventInfo(event,CL_EVENT_COMMAND_TYPE,sizeof(cl_command_type), &command, NULL);
+	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_TYPE returned %d\n", ret);
+	// Get event queue id
+	ret = reallib_clGetEventInfo(event,CL_EVENT_COMMAND_QUEUE,sizeof(cl_command_queue), &queue, NULL);
+	if(ret != CL_SUCCESS) fprintf(stdout, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_QUEUE returned %d\n", ret);
+	// Record with UST tracepoint
+	//tracepoint(clust_provider, clust_device_event, queue, command, start, end);
+#ifdef __DEBUG__
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+
+	const char* command_name_str = getCommandNameFromCommandID(command);
+
+	fprintf(stdout, "CLUST::eventCompleted: \n"
+						"\tName: %s\n"
+						"\tStart:\t%ld ns\n"
+						"\tEnd:\t%ld ns\n"
+						"\tDuration:\t%ld ns\n"
+						"\tQueueID: %p\n"
+						"\tCommandID: %d\n"
+						"\tCPU's Monotonic clock: %lu\n",
+						command_name_str, start,end,(end-start),queue,command,ts.tv_nsec+(ts.tv_sec*1000000000));
+#endif
+	if(*releaseEvent == ev_delete) {
+		fprintf(stdout, "\tReleasing Event...\n");
+		reallib_clReleaseEvent(event);
+	}
+}
 
 cl_int clEnqueueNDRangeKernel(cl_command_queue command_queue, cl_kernel kernel, cl_uint work_dim, const size_t * global_work_offset, const size_t * global_work_size, const size_t * local_work_size, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  CL_API_SUFFIX__VERSION_1_0 {
 	tracepoint(clust_provider, cl_function, "clEnqueueNDRangeKernel");
+
+	bool toDelete = false;
+	if(event == NULL) {
+		fprintf(stdout, "CLUST::clEnqueueNDRangeKernel: Creating event dynamically...\n");
+		event = malloc(sizeof(cl_event));
+		toDelete = true;
+	}
+
 	cl_int ret = reallib_clEnqueueNDRangeKernel(command_queue, kernel, work_dim, global_work_offset, global_work_size, local_work_size, num_events_in_wait_list, event_wait_list, event);
+
+	int r = clSetEventCallback(*event, CL_COMPLETE,
+			&eventCompleted,
+			(toDelete)?&ev_delete:&ev_keep
+					);
+
 	return ret;
 }
 

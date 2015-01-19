@@ -1,6 +1,8 @@
 #ifndef CLUST_H_
 #define CLUST_H_
 
+#define __DEBUG__
+
 #include <CL/cl.h>
 #define LIB_NAME "libCLUST"
 #define LIBCL_NAME "libOpenCL.so"
@@ -8,6 +10,9 @@
 #ifdef __cplusplus
 "C" {
 #endif
+
+typedef int bool;
+enum { false, true };
 
 typedef cl_int (*cl_api_call_clGetPlatformIDs) (cl_uint num_entries,cl_platform_id * platforms,cl_uint * num_platforms);
 extern cl_api_call_clGetPlatformIDs reallib_clGetPlatformIDs;
