@@ -13,10 +13,10 @@ TRACEPOINT_EVENT(
 		clust_provider,
 		cl_function,
     TP_ARGS(
-        char*, my_string_arg, int, start_arg
+        int, api_call_id_arg, int, start_arg
     ),
     TP_FIELDS(
-        ctf_string(my_string_field, my_string_arg)
+    	ctf_integer(unsigned char, api_call_id_field, api_call_id_arg)
         ctf_integer(bool, boolfield, start_arg)
     )
 )
