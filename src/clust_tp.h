@@ -11,29 +11,1188 @@
 
 TRACEPOINT_EVENT(
 		clust_provider,
-		cl_function,
-    TP_ARGS(
-        int, api_call_id_arg, int, start_arg
-    ),
-    TP_FIELDS(
-    	ctf_integer(unsigned char, api_call_id_field, api_call_id_arg)
-        ctf_integer(bool, boolfield, start_arg)
-    )
-)
-
-TRACEPOINT_EVENT(
-		clust_provider,
 		clust_device_event,
     TP_ARGS(
         ulong, queue_arg, int, command_arg, ulong, start_arg, ulong, end_arg
     ),
     TP_FIELDS(
-            ctf_integer(ulong, queue_field, queue_arg)
+            ctf_integer_hex(ulong, queue_field, queue_arg)
             ctf_integer(int, command_field, command_arg)
             ctf_integer(ulong, start_field, start_arg)
             ctf_integer(ulong, end_field, end_arg)
     )
 )
+
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetPlatformIDs_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetPlatformIDs_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetPlatformInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetPlatformInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetDeviceIDs_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetDeviceIDs_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetDeviceInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetDeviceInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateContext_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateContext_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateContextFromType_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateContextFromType_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainContext_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainContext_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseContext_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseContext_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetContextInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetContextInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateCommandQueue_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateCommandQueue_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainCommandQueue_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainCommandQueue_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseCommandQueue_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseCommandQueue_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetCommandQueueInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetCommandQueueInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateBuffer_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateBuffer_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateSubBuffer_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateSubBuffer_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateImage2D_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateImage2D_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateImage3D_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateImage3D_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainMemObject_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainMemObject_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseMemObject_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseMemObject_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetSupportedImageFormats_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetSupportedImageFormats_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetMemObjectInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetMemObjectInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetImageInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetImageInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetMemObjectDestructorCallback_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetMemObjectDestructorCallback_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateSampler_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateSampler_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainSampler_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainSampler_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseSampler_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseSampler_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetSamplerInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetSamplerInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateProgramWithSource_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateProgramWithSource_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateProgramWithBinary_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateProgramWithBinary_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainProgram_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainProgram_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseProgram_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseProgram_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clBuildProgram_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clBuildProgram_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clUnloadCompiler_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clUnloadCompiler_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetProgramInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetProgramInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetProgramBuildInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetProgramBuildInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateKernel_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateKernel_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateKernelsInProgram_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateKernelsInProgram_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainKernel_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainKernel_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseKernel_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseKernel_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetKernelArg_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetKernelArg_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetKernelInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetKernelInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetKernelWorkGroupInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetKernelWorkGroupInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clWaitForEvents_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clWaitForEvents_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetEventInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetEventInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateUserEvent_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clCreateUserEvent_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainEvent_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clRetainEvent_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseEvent_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clReleaseEvent_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetUserEventStatus_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetUserEventStatus_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetEventCallback_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clSetEventCallback_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetEventProfilingInfo_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetEventProfilingInfo_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clFlush_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clFlush_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clFinish_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clFinish_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueReadBuffer_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueReadBuffer_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueReadBufferRect_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueReadBufferRect_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWriteBuffer_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWriteBuffer_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWriteBufferRect_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWriteBufferRect_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyBuffer_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyBuffer_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyBufferRect_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyBufferRect_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueReadImage_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueReadImage_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWriteImage_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWriteImage_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyImage_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyImage_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyImageToBuffer_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyImageToBuffer_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyBufferToImage_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueCopyBufferToImage_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueMapBuffer_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueMapBuffer_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueMapImage_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueMapImage_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueUnmapMemObject_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueUnmapMemObject_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueNDRangeKernel_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueNDRangeKernel_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueTask_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueTask_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueNativeKernel_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueNativeKernel_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueMarker_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueMarker_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWaitForEvents_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueWaitForEvents_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueBarrier_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clEnqueueBarrier_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetExtensionFunctionAddress_start,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+TRACEPOINT_EVENT(
+	clust_provider,
+	cl_clGetExtensionFunctionAddress_end,
+TP_ARGS(
+),
+TP_FIELDS(
+)
+)
+
+
 
 #endif /* _CLUST_TP_H */
 
