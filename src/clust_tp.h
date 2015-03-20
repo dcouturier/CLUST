@@ -13,11 +13,13 @@ TRACEPOINT_EVENT(
 		clust_provider,
 		clust_device_event,
     TP_ARGS(
-        ulong, queue_arg, int, command_arg, ulong, start_arg, ulong, end_arg
+        ulong, queue_arg, int, command_arg, ulong, queued_arg, ulong, submit_arg, ulong, start_arg, ulong, end_arg
     ),
     TP_FIELDS(
             ctf_integer_hex(ulong, queue_field, queue_arg)
             ctf_integer(int, command_field, command_arg)
+            ctf_integer(ulong, queued_field, queued_arg)
+            ctf_integer(ulong, submit_field, submit_arg)
             ctf_integer(ulong, start_field, start_arg)
             ctf_integer(ulong, end_field, end_arg)
     )

@@ -274,17 +274,26 @@ const char* getCommandNameFromCommandID(cl_command_type command) {
 void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *user_data)
 {
 	cl_int * releaseEvent = (cl_int*) user_data;
+	cl_int ret;
 	cl_ulong start = 0;
 	cl_ulong end = 0;
+	cl_ulong queued = 0;
+	cl_ulong submit = 0;
 	cl_command_type command;
 	cl_command_queue queue;
 
 	// Get event start time
-	cl_int ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
+	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
 	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_START returned %d\n", ret);
 	// Get event end time
 	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
 	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_END returned %d\n", ret);
+	// Get event enqueue time
+	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_QUEUED, sizeof(cl_ulong), &queued, NULL);
+	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_QUEUED returned %d\n", ret);
+	// Get event submit time
+	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_SUBMIT, sizeof(cl_ulong), &submit, NULL);
+	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_SUBMIT returned %d\n", ret);
 	// Get event command name (CL_COMMAND_NDRANGE_KERNEL, CL_COMMAND_WRITE_BUFFER, ...)
 	ret = reallib_clGetEventInfo(event,CL_EVENT_COMMAND_TYPE,sizeof(cl_command_type), &command, NULL);
 	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_TYPE returned %d\n", ret);
@@ -292,7 +301,7 @@ void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *us
 	ret = reallib_clGetEventInfo(event,CL_EVENT_COMMAND_QUEUE,sizeof(cl_command_queue), &queue, NULL);
 	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_EVENT_COMMAND_QUEUE returned %d\n", ret);
 	// Record with UST tracepoint
-	tracepoint(clust_provider, clust_device_event, (ulong)queue, command, start, end);
+	tracepoint(clust_provider, clust_device_event, (ulong)queue, command, queued, submit, start, end);
 #ifdef __DEBUG__
 	struct timespec ts;
 	clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -310,7 +319,9 @@ void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *us
 						command_name_str, start,end,(end-start),queue,command,ts.tv_nsec+(ts.tv_sec*1000000000));
 #endif
 	if(*releaseEvent == ev_delete) {
-		fprintf(stdout, "\tReleasing Event...\n");
+#ifdef __DEBUG__
+		fprintf(stdout, "CLUST::eventCompleted: Releasing event dynamically\n");
+#endif
 		reallib_clReleaseEvent(event);
 	}
 }
@@ -736,6 +747,7 @@ cl_int clFinish(cl_command_queue command_queue)  {
 cl_int clEnqueueReadBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, size_t offset, size_t cb, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
 	bool toDelete = false;
 	if(event == NULL) {
+
 #ifdef __DEBUG__
 		fprintf(stdout, "CLUST::clEnqueueReadBuffer: Creating event dynamically...\n");
 #endif
