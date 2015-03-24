@@ -274,7 +274,6 @@ const char* getCommandNameFromCommandID(cl_command_type command) {
 void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *user_data)
 {
 	cl_int * releaseEvent = (cl_int*) user_data;
-	cl_int ret;
 	cl_ulong start = 0;
 	cl_ulong end = 0;
 	cl_ulong queued = 0;
@@ -283,7 +282,7 @@ void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *us
 	cl_command_queue queue;
 
 	// Get event start time
-	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
+	cl_int ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
 	if(ret != CL_SUCCESS) fprintf(stderr, "CLUST::eventCompleted:error->CL_PROFILING_COMMAND_START returned %d\n", ret);
 	// Get event end time
 	ret = reallib_clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
@@ -320,11 +319,12 @@ void CL_CALLBACK eventCompleted(cl_event event, cl_int cmd_exec_status, void *us
 #endif
 	if(*releaseEvent == ev_delete) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::eventCompleted: Releasing event dynamically\n");
+		fprintf(stdout, "CLUST::eventCompleted: Dynamically releasing Event...\n");
 #endif
 		reallib_clReleaseEvent(event);
 	}
 }
+	
 
 
 cl_int clGetPlatformIDs(cl_uint num_entries, cl_platform_id * platforms, cl_uint * num_platforms)  {
@@ -745,379 +745,468 @@ cl_int clFinish(cl_command_queue command_queue)  {
 
 
 cl_int clEnqueueReadBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, size_t offset, size_t cb, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
-
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueReadBuffer: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueReadBuffer: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueReadBuffer_start);
 	cl_int ret = reallib_clEnqueueReadBuffer(command_queue, buffer, blocking_read, offset, cb, ptr, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueReadBuffer_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadBuffer->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadBuffer->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueReadBufferRect(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, const size_t * buffer_origin, const size_t * host_origin, const size_t * region, size_t buffer_row_pitch, size_t buffer_slice_pitch, size_t host_row_pitch, size_t host_slice_pitch, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueReadBufferRect: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueReadBufferRect: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueReadBufferRect_start);
 	cl_int ret = reallib_clEnqueueReadBufferRect(command_queue, buffer, blocking_read, buffer_origin, host_origin, region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueReadBufferRect_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadBufferRect->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadBufferRect->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueWriteBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, size_t offset, size_t cb, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueWriteBuffer: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueWriteBuffer: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueWriteBuffer_start);
 	cl_int ret = reallib_clEnqueueWriteBuffer(command_queue, buffer, blocking_write, offset, cb, ptr, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueWriteBuffer_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteBuffer->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteBuffer->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueWriteBufferRect(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, const size_t * buffer_origin, const size_t * host_origin, const size_t * region, size_t buffer_row_pitch, size_t buffer_slice_pitch, size_t host_row_pitch, size_t host_slice_pitch, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueWriteBufferRect: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueWriteBufferRect: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueWriteBufferRect_start);
 	cl_int ret = reallib_clEnqueueWriteBufferRect(command_queue, buffer, blocking_write, buffer_origin, host_origin, region, buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueWriteBufferRect_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteBufferRect->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteBufferRect->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueCopyBuffer(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, size_t src_offset, size_t dst_offset, size_t cb, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueCopyBuffer: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueCopyBuffer: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueCopyBuffer_start);
 	cl_int ret = reallib_clEnqueueCopyBuffer(command_queue, src_buffer, dst_buffer, src_offset, dst_offset, cb, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueCopyBuffer_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBuffer->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBuffer->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueCopyBufferRect(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, const size_t * src_origin, const size_t * dst_origin, const size_t * region, size_t src_row_pitch, size_t src_slice_pitch, size_t dst_row_pitch, size_t dst_slice_pitch, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueCopyBufferRect: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueCopyBufferRect: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueCopyBufferRect_start);
 	cl_int ret = reallib_clEnqueueCopyBufferRect(command_queue, src_buffer, dst_buffer, src_origin, dst_origin, region, src_row_pitch, src_slice_pitch, dst_row_pitch, dst_slice_pitch, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueCopyBufferRect_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBufferRect->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBufferRect->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueReadImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_read, const size_t * origin, const size_t * region, size_t row_pitch, size_t slice_pitch, void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueReadImage: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueReadImage: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueReadImage_start);
 	cl_int ret = reallib_clEnqueueReadImage(command_queue, image, blocking_read, &origin, &region, row_pitch, slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueReadImage_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadImage->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueReadImage->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueWriteImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_write, const size_t * origin, const size_t * region, size_t input_row_pitch, size_t input_slice_pitch, const void * ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueWriteImage: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueWriteImage: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueWriteImage_start);
 	cl_int ret = reallib_clEnqueueWriteImage(command_queue, image, blocking_write, &origin, &region, input_row_pitch, input_slice_pitch, ptr, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueWriteImage_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteImage->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueWriteImage->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueCopyImage(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_image, const size_t * src_origin, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueCopyImage: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueCopyImage: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueCopyImage_start);
 	cl_int ret = reallib_clEnqueueCopyImage(command_queue, src_image, dst_image, &src_origin, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueCopyImage_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyImage->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyImage->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueCopyImageToBuffer(cl_command_queue command_queue, cl_mem src_image, cl_mem dst_buffer, const size_t * src_origin, const size_t * region, size_t dst_offset, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueCopyImageToBuffer: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueCopyImageToBuffer: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueCopyImageToBuffer_start);
 	cl_int ret = reallib_clEnqueueCopyImageToBuffer(command_queue, src_image, dst_buffer, &src_origin, &region, dst_offset, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueCopyImageToBuffer_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyImageToBuffer->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyImageToBuffer->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueCopyBufferToImage(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_image, size_t src_offset, const size_t * dst_origin, const size_t * region, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueCopyBufferToImage: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueCopyBufferToImage: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueCopyBufferToImage_start);
 	cl_int ret = reallib_clEnqueueCopyBufferToImage(command_queue, src_buffer, dst_image, src_offset, &dst_origin, &region, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueCopyBufferToImage_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBufferToImage->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueCopyBufferToImage->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 void * clEnqueueMapBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_map, cl_map_flags map_flags, size_t offset, size_t cb, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event, cl_int * errcode_ret)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueMapBuffer: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueMapBuffer: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueMapBuffer_start);
 	void * ret = reallib_clEnqueueMapBuffer(command_queue, buffer, blocking_map, map_flags, offset, cb, num_events_in_wait_list, event_wait_list, event, errcode_ret);
 	tracepoint(clust_provider, cl_clEnqueueMapBuffer_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMapBuffer->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMapBuffer->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 void * clEnqueueMapImage(cl_command_queue command_queue, cl_mem image, cl_bool blocking_map, cl_map_flags map_flags, const size_t * origin, const size_t * region, size_t * image_row_pitch, size_t * image_slice_pitch, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event, cl_int * errcode_ret)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueMapImage: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueMapImage: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueMapImage_start);
 	void * ret = reallib_clEnqueueMapImage(command_queue, image, blocking_map, map_flags, &origin, &region, image_row_pitch, image_slice_pitch, num_events_in_wait_list, event_wait_list, event, errcode_ret);
 	tracepoint(clust_provider, cl_clEnqueueMapImage_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMapImage->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMapImage->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueUnmapMemObject(cl_command_queue command_queue, cl_mem memobj, void * mapped_ptr, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueUnmapMemObject: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueUnmapMemObject: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueUnmapMemObject_start);
 	cl_int ret = reallib_clEnqueueUnmapMemObject(command_queue, memobj, mapped_ptr, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueUnmapMemObject_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueUnmapMemObject->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueUnmapMemObject->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueNDRangeKernel(cl_command_queue command_queue, cl_kernel kernel, cl_uint work_dim, const size_t * global_work_offset, const size_t * global_work_size, const size_t * local_work_size, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueNDRangeKernel: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueNDRangeKernel: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueNDRangeKernel_start);
 	cl_int ret = reallib_clEnqueueNDRangeKernel(command_queue, kernel, work_dim, global_work_offset, global_work_size, local_work_size, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueNDRangeKernel_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueNDRangeKernel->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueNDRangeKernel->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueTask(cl_command_queue command_queue, cl_kernel kernel, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueTask: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueTask: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueTask_start);
 	cl_int ret = reallib_clEnqueueTask(command_queue, kernel, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueTask_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueTask->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueTask->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueNativeKernel(cl_command_queue command_queue, void (*user_func)(void *) , void * args, size_t cb_args, cl_uint num_mem_objects, const cl_mem * mem_list, const void ** args_mem_loc, cl_uint num_events_in_wait_list, const cl_event * event_wait_list, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueNativeKernel: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueNativeKernel: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueNativeKernel_start);
 	cl_int ret = reallib_clEnqueueNativeKernel(command_queue, user_func, args, cb_args, num_mem_objects, mem_list, args_mem_loc, num_events_in_wait_list, event_wait_list, event);
 	tracepoint(clust_provider, cl_clEnqueueNativeKernel_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueNativeKernel->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueNativeKernel->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
 
 
 cl_int clEnqueueMarker(cl_command_queue command_queue, cl_event * event)  {
+	const bool trace = __tracepoint_clust_provider___clust_device_event.state;
 	bool toDelete = false;
-	if(event == NULL) {
+	if(caa_unlikely(trace)) {
+		if(event == NULL) {
 #ifdef __DEBUG__
-		fprintf(stdout, "CLUST::clEnqueueMarker: Creating event dynamically...\n");
+			fprintf(stdout, "CLUST::clEnqueueMarker: Creating event dynamically...\n");
 #endif
-		event = malloc(sizeof(cl_event));
-		toDelete = true;
+			event = malloc(sizeof(cl_event));
+			toDelete = true;
+		}
 	}
 
 	tracepoint(clust_provider, cl_clEnqueueMarker_start);
 	cl_int ret = reallib_clEnqueueMarker(command_queue, event);
 	tracepoint(clust_provider, cl_clEnqueueMarker_end);
 
-	int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
-	if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMarker->clSetEventCallback:error->%d\n", r);
+	if(caa_unlikely(trace)) {
+		int r = reallib_clSetEventCallback(*event, CL_COMPLETE, &eventCompleted, (toDelete)?&ev_delete:&ev_keep);
+		if(r != CL_SUCCESS) fprintf(stderr, "CLUST::clEnqueueMarker->clSetEventCallback:error->%d\n", r);
+	}
 
 	return ret;
 }
